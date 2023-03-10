@@ -16,6 +16,18 @@ pub fn App(cx: Scope) -> impl IntoView {
 }
 
 #[component]
+fn AsChildren(cx: Scope, children: Children) -> impl IntoView {
+    view! {
+        cx,
+        // OR attempting to use children in the standard way gives a move error:
+        <Suspense fallback={move || view!{cx, <p>"Loading..."</p>}}>
+            {children(cx)} // FIXME: errors here with:
+                           // error[E0507]: cannot move out of `children`, a captured variable in an `Fn` closure
+        </Suspense>
+    }
+}
+
+#[component]
 fn AsAttr(cx: Scope, children: Children) -> impl IntoView {
     view! {
         cx,
@@ -28,17 +40,5 @@ fn AsAttr(cx: Scope, children: Children) -> impl IntoView {
                                 //    = note: expected struct `Box<(dyn std::ops::Fn(leptos::Scope) -> Fragment + 'static)>`
                                 //               found struct `Box<(dyn FnOnce(leptos::Scope) -> Fragment + 'static)>`
         />
-    }
-}
-
-#[component]
-fn AsChildren(cx: Scope, children: Children) -> impl IntoView {
-    view! {
-        cx,
-        // OR attempting to use children in the standard way gives a move error:
-        <Suspense fallback={move || view!{cx, <p>"Loading..."</p>}}>
-            {children(cx)} // FIXME: errors here with:
-                           // error[E0507]: cannot move out of `children`, a captured variable in an `Fn` closure
-        </Suspense>
     }
 }
