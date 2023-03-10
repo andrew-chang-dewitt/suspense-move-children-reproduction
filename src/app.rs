@@ -19,7 +19,7 @@ pub fn App(cx: Scope) -> impl IntoView {
 fn AsChildren(cx: Scope, children: Children) -> impl IntoView {
     view! {
         cx,
-        // OR attempting to use children in the standard way gives a move error:
+        // Attempting to use children in the standard way gives a move error:
         <Suspense fallback={move || view!{cx, <p>"Loading..."</p>}}>
             {children(cx)} // FIXME: errors here with:
                            // error[E0507]: cannot move out of `children`, a captured variable in an `Fn` closure
@@ -31,7 +31,7 @@ fn AsChildren(cx: Scope, children: Children) -> impl IntoView {
 fn AsAttr(cx: Scope, children: Children) -> impl IntoView {
     view! {
         cx,
-        // Attempting to pass children as an attribute directly instead of the normal way gives a
+        // OR attempting to pass children as an attribute directly instead of the normal way gives a
         // mismatched type error:
         <Suspense
             fallback={move || view!{cx, <p>"Loading..."</p>}}
